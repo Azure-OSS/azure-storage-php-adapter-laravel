@@ -20,7 +20,7 @@ final class AzureStorageBlobServiceProvider extends ServiceProvider
         Storage::extend('azure-storage-blob', function (Application $app, array $config): FilesystemAdapter {
             $serviceClient = BlobServiceClient::fromConnectionString($config['connection_string']);
             $containerClient = $serviceClient->getContainerClient($config['container']);
-            $adapter = new AzureBlobStorageAdapter($containerClient, $config['prefix'] ?? null);
+            $adapter = new AzureBlobStorageAdapter($containerClient, $config['prefix'] ?? "");
 
             return new FilesystemAdapter(
                 new Filesystem($adapter, $config),
