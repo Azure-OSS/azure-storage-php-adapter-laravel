@@ -1,26 +1,33 @@
 {
-    "name": "azure-oss/storage-blob-laravel",
-    "description": "Azure Storage Blob filesystem driver for Laravel",
-    "type": "library",
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "AzureOss\\LaravelAzureStorageBlob\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Brecht Vermeersch",
-            "email": "brechtvermeersch@outlook.be"
-        }
-    ],
-    "require": {
-        "php": "^8.1",
-        "illuminate/filesystem": "^10|^11",
-        "illuminate/support": "^10|^11",
-        "azure-oss/storage-blob-flysystem": "^1.0"
-    },
-    "require-dev": {
-        "laravel/pint": "^1.17"
+  "name": "azure-oss/storage-blob-laravel",
+  "description": "Azure Storage Blob filesystem driver for Laravel",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "AzureOss\\LaravelAzureStorageBlob\\": "src/"
     }
+  },
+  "authors": [
+    {
+      "name": "Brecht Vermeersch",
+      "email": "brechtvermeersch@outlook.be"
+    }
+  ],
+  "require": {
+    "php": "^8.1",
+    "illuminate/filesystem": "^10|^11",
+    "illuminate/support": "^10|^11",
+    "azure-oss/storage-blob-flysystem": "^1.0"
+  },
+  "require-dev": {
+    "laravel/pint": "^1.17"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "AzureOss\\LaravelAzureStorageBlob\\AzureStorageBlobServiceProvider"
+      ]
+    }
+  }
 }

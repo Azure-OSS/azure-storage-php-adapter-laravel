@@ -13,7 +13,7 @@ use League\Flysystem\Filesystem;
 /**
  * @internal
  */
-final class AzureBlobStorageServiceProvider extends ServiceProvider
+final class AzureStorageBlobServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
