@@ -16,8 +16,8 @@
     ],
     "require": {
         "php": "^8.1",
-        "illuminate/filesystem": "^11.18",
-        "illuminate/support": "^11.18",
+        "illuminate/filesystem": "^10|^11",
+        "illuminate/support": "^10|^11",
         "azure-oss/storage-blob-flysystem": "^1.0"
     },
     "require-dev": {
