@@ -10,14 +10,19 @@ use League\Flysystem\Filesystem;
 
 /**
  * @internal
+ *
+ * @property AzureBlobStorageAdapter $adapter
  */
 final class AzureStorageBlobAdapter extends FilesystemAdapter
 {
+    /**
+     * @param  array{connection_string: string, container: string, prefix?: string}  $config
+     */
     public function __construct(array $config)
     {
         $serviceClient = BlobServiceClient::fromConnectionString($config['connection_string']);
         $containerClient = $serviceClient->getContainerClient($config['container']);
-        $adapter = new AzureBlobStorageAdapter($containerClient, $config['prefix'] ?? "");
+        $adapter = new AzureBlobStorageAdapter($containerClient, $config['prefix'] ?? '');
 
         parent::__construct(
             new Filesystem($adapter, $config),
@@ -26,17 +31,13 @@ final class AzureStorageBlobAdapter extends FilesystemAdapter
         );
     }
 
+    /** @phpstan-ignore-next-line  */
     public function temporaryUrl($path, $expiration, array $options = [])
     {
-        $options["permissions"] = $options["permissions"] ?? "r";
-
-        return $this->adapter->temporaryUrl($path, $expiration, new Config($options));
-    }
-
-    public function temporaryUploadUrl($path, $expiration, array $options = [])
-    {
-        $options["permissions"] = $options["permissions"] ?? "w";
-
-        return $this->adapter->temporaryUrl($path, $expiration, new Config($options));
+        return $this->adapter->temporaryUrl(
+            $path,
+            $expiration,
+            new Config(['permissions' => 'r'])
+        );
     }
 }
