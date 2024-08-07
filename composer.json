@@ -18,7 +18,7 @@
     "php": "^8.1",
     "illuminate/filesystem": "^10|^11",
     "illuminate/support": "^10|^11",
-    "azure-oss/storage-blob-flysystem": "^1.0"
+    "azure-oss/storage-blob-flysystem": "^1.1"
   },
   "require-dev": {
     "laravel/pint": "^1.17"
