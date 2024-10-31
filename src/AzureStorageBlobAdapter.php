@@ -22,7 +22,7 @@ final class AzureStorageBlobAdapter extends FilesystemAdapter
     {
         $serviceClient = BlobServiceClient::fromConnectionString($config['connection_string']);
         $containerClient = $serviceClient->getContainerClient($config['container']);
-        $adapter = new AzureBlobStorageAdapter($containerClient, $config['root'] ?? '');
+        $adapter = new AzureBlobStorageAdapter($containerClient, $config['prefix'] ?? $config['root'] ?? '');
 
         parent::__construct(
             new Filesystem($adapter, $config),
