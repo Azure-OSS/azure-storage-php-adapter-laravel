@@ -16,7 +16,7 @@ use League\Flysystem\Filesystem;
 final class AzureStorageBlobAdapter extends FilesystemAdapter
 {
     /**
-     * @param  array{connection_string: string, container: string, root?: string}  $config
+     * @param  array{connection_string: string, container: string, prefix?: string, root?: string}  $config
      */
     public function __construct(array $config)
     {
