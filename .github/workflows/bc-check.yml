@@ -1,0 +1,19 @@
+on:
+  pull_request:
+  push:
+    branches:
+      - "main"
+
+name: Breaking Changes
+
+jobs:
+  roave-bc-check:
+    name: Roave BC Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for breaking changes
+        run: docker run --env GITHUB_REPOSITORY="Azure-OSS/azure-storage-php-adapter-laravel" -u $(id -u) -v $(pwd):/app nyholm/roave-bc-check-ga
