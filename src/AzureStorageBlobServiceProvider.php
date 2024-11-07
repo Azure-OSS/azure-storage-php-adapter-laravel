@@ -26,6 +26,10 @@ final class AzureStorageBlobServiceProvider extends ServiceProvider
             if (isset($config['prefix']) && ! is_string($config['prefix'])) {
                 throw new \InvalidArgumentException('The [prefix] must be a string in the disk configuration.');
             }
+            
+            if (isset($config['root']) && ! is_string($config['root'])) {
+                throw new \InvalidArgumentException('The [root] must be a string in the disk configuration.');
+            }
 
             return new AzureStorageBlobAdapter($config);
         });

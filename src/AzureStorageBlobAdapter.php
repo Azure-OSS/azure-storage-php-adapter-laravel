@@ -16,13 +16,13 @@ use League\Flysystem\Filesystem;
 final class AzureStorageBlobAdapter extends FilesystemAdapter
 {
     /**
-     * @param  array{connection_string: string, container: string, prefix?: string}  $config
+     * @param  array{connection_string: string, container: string, prefix?: string, root?: string}  $config
      */
     public function __construct(array $config)
     {
         $serviceClient = BlobServiceClient::fromConnectionString($config['connection_string']);
         $containerClient = $serviceClient->getContainerClient($config['container']);
-        $adapter = new AzureBlobStorageAdapter($containerClient, $config['prefix'] ?? '');
+        $adapter = new AzureBlobStorageAdapter($containerClient, $config['prefix'] ?? $config['root'] ?? '');
 
         parent::__construct(
             new Filesystem($adapter, $config),
