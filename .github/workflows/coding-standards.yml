@@ -1,0 +1,42 @@
+on:
+  pull_request: ~
+  push:
+    branches:
+      - "main"
+
+name: Coding Standards
+
+permissions: write-all
+
+jobs:
+  pint:
+    name: Check & fix styling
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-version:
+          - 8.1 # Always run on the lowest supported version due to compatibility
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: curl json
+          coverage: none
+
+      - name: Download dependencies
+        run: composer install --no-interaction --no-progress --optimize-autoloader
+
+      - name: Run laravel/pint
+        run: vendor/bin/pint
+
+      - name: Commit linted files
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Fixes coding style"

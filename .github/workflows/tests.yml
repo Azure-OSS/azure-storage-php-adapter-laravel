@@ -1,0 +1,46 @@
+on:
+  pull_request:
+  push:
+    branches:
+      - "main"
+
+name: Tests
+
+jobs:
+  phpunit:
+    name: PHPUnit on ${{ matrix.operating-system }} with PHP ${{ matrix.php-version }}
+
+    strategy:
+      matrix:
+        operating-system:
+          - 'ubuntu-latest'
+        php-version:
+          - '8.1'
+          - '8.2'
+          - '8.3'
+          - '8.4'
+
+    services:
+      azurite:
+        image: mcr.microsoft.com/azure-storage/azurite
+        ports:
+          - 10000:10000
+
+    runs-on: ${{ matrix.operating-system }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install PHP with extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: curl json
+          coverage: none
+
+      - name: Download dependencies
+        run: composer install --no-interaction --no-progress --optimize-autoloader
+
+      - name: Run tests
+        run: ./vendor/bin/phpunit

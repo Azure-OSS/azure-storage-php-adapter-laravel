@@ -1,0 +1,45 @@
+on: # yamllint disable-line rule:truthy
+  pull_request: ~
+  push:
+    branches:
+      - "main"
+      - "[0-9].*"
+
+name: "Code Coverage"
+
+jobs:
+  code-coverage:
+    name: "Code Coverage"
+
+    strategy:
+      matrix:
+        php-version:
+          - "8.1"
+
+    services:
+      azurite:
+        image: mcr.microsoft.com/azure-storage/azurite
+        ports:
+          - 10000:10000
+
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: "Checkout code"
+        uses: "actions/checkout@v4"
+
+      - name: "Install PHP with extensions"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          coverage: xdebug
+          extensions: json curl
+          php-version: "${{ matrix.php-version }}"
+
+      - name: "Download dependencies"
+        run: composer install --ansi --no-interaction --no-progress --optimize-autoloader
+
+      - name: "Collect code coverage with PHPUnit"
+        run: vendor/bin/phpunit --colors=always --coverage-clover=.build/logs/clover.xml
+
+      - name: "Send code coverage report to codecov.io"
+        run: bash <(curl -s https://codecov.io/bash)
