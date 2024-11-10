@@ -53,6 +53,10 @@ class AzureStorageBlobAdapterTest extends TestCase
             'content',
             Http::get($driver->temporaryUrl('file.txt', now()->addMinute()))->body()
         );
+        self::assertEquals(
+            'content',
+            Http::get($driver->url('file.txt'))->body()
+        );
 
         $driver->copy('file.txt', 'file2.txt');
 

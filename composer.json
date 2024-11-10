@@ -10,7 +10,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "AzureOss\\LaravelAzureStorageBlob\\Tests": "tests/"
+      "AzureOss\\LaravelAzureStorageBlob\\Tests\\": "tests/"
     }
   },
   "authors": [
@@ -23,7 +23,7 @@
     "php": "^8.1",
     "illuminate/filesystem": "^10|^11",
     "illuminate/support": "^10|^11",
-    "azure-oss/storage-blob-flysystem": "^1.1"
+    "azure-oss/storage-blob-flysystem": "^1.2"
   },
   "require-dev": {
     "laravel/pint": "^1.17",
