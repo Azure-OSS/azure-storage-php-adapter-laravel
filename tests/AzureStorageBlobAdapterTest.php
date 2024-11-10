@@ -4,6 +4,7 @@ namespace AzureOss\LaravelAzureStorageBlob\Tests;
 
 use AzureOss\LaravelAzureStorageBlob\AzureStorageBlobAdapter;
 use AzureOss\LaravelAzureStorageBlob\AzureStorageBlobServiceProvider;
+use AzureOss\Storage\Blob\BlobServiceClient;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Orchestra\Testbench\TestCase;
@@ -34,6 +35,10 @@ class AzureStorageBlobAdapterTest extends TestCase
     #[Test]
     public function driver_works(): void
     {
+        BlobServiceClient::fromConnectionString(env('AZURE_STORAGE_CONNECTION_STRING'))
+            ->getContainerClient(env('AZURE_STORAGE_CONTAINER'))
+            ->createIfNotExists();
+
         $driver = Storage::disk('azure');
 
         // cleanup from previous test runs
