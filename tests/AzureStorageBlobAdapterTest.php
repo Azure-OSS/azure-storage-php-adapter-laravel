@@ -4,6 +4,8 @@ namespace AzureOss\LaravelAzureStorageBlob\Tests;
 
 use AzureOss\LaravelAzureStorageBlob\AzureStorageBlobAdapter;
 use AzureOss\LaravelAzureStorageBlob\AzureStorageBlobServiceProvider;
+use AzureOss\Storage\Blob\BlobContainerClient;
+use AzureOss\Storage\Blob\BlobServiceClient;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Orchestra\Testbench\TestCase;
@@ -23,6 +25,25 @@ class AzureStorageBlobAdapterTest extends TestCase
             'connection_string' => env('AZURE_STORAGE_CONNECTION_STRING'),
             'container' => env('AZURE_STORAGE_CONTAINER'),
         ]);
+    }
+
+    private static function createContainerClient(): BlobContainerClient
+    {
+        $connectionString = getenv('AZURE_STORAGE_CONNECTION_STRING');
+
+        if (empty($connectionString)) {
+            self::markTestSkipped('AZURE_STORAGE_CONNECTION_STRING is not provided.');
+        }
+
+        return BlobServiceClient::fromConnectionString($connectionString)->getContainerClient(
+            getenv('AZURE_STORAGE_CONTAINER')
+        );
+    }
+
+    public static function setUpBeforeClass(): void
+    {
+        self::createContainerClient()->deleteIfExists();
+        self::createContainerClient()->create();
     }
 
     #[Test]
