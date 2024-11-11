@@ -2,12 +2,13 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.3/phpunit.xsd"
          bootstrap="vendor/autoload.php"
-         cacheDirectory=".phpunit.cache"
+         cacheDirectory=".build/.phpunit.cache"
          executionOrder="depends,defects"
-         shortenArraysForExportThreshold="10"
+         beStrictAboutCoverageMetadata="true"
          beStrictAboutOutputDuringTests="true"
          failOnRisky="true"
-         failOnWarning="true">
+         failOnWarning="true"
+         displayDetailsOnTestsThatTriggerWarnings="true">
     <php>
         <env name="AZURE_STORAGE_CONNECTION_STRING" value="UseDevelopmentStorage=true"/>
         <env name="AZURE_STORAGE_CONTAINER" value="testing"/>
@@ -19,7 +20,7 @@
         </testsuite>
     </testsuites>
 
-    <source ignoreIndirectDeprecations="true" restrictNotices="true" restrictWarnings="true">
+    <source restrictDeprecations="true" restrictNotices="true" restrictWarnings="true">
         <include>
             <directory>src</directory>
         </include>

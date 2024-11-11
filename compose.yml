@@ -1,0 +1,25 @@
+services:
+  phpfpm:
+    build:
+      context: .
+      args:
+        UID: ${USER_ID:-1000}
+        GID: ${GROUP_ID:-1000}
+    user: "${UID:-1000}:${GID:-1000}"
+    links:
+      - "azurite"
+    volumes:
+      - .:/app
+
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    ports:
+      - 10000:10000
+      - 10001:10001
+      - 10002:10002
+    volumes:
+      - azurite:/data
+
+volumes:
+  azurite:
+    driver: local
