@@ -31,6 +31,11 @@ final class AzureStorageBlobAdapter extends FilesystemAdapter
         );
     }
 
+    public function url($path)
+    {
+        return $this->adapter->publicUrl($path, new Config);
+    }
+
     /** @phpstan-ignore-next-line  */
     public function temporaryUrl($path, $expiration, array $options = [])
     {
