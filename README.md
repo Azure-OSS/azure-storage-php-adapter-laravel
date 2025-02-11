@@ -26,62 +26,7 @@ Then add this to the disks section of config/filesystems.php:
 
 ## Usage
 
-### Example: Upload a File
-
-Example of how to upload a file to Azure Blob Storage:
-
-```php
-use Illuminate\Support\Facades\Storage;
-
-$file = $request->file('file'); // Assuming a file upload from a request
-
-// Generate a unique file name with extension
-$fileName = uniqid() . '.' . $file->getClientOriginalExtension();
-
-// Upload the file to Azure Blob Storage
-$path = Storage::disk('azure')->putFileAs('', $file, $fileName);
-
-return response()->json([
-    'message' => 'File uploaded successfully' 
-]);
-```
-
-### Example: Get File URL
-
-#### Permanent URL
-
-To get a public URL (if the blob container is set to allow public access):
-
-```php
-use Illuminate\Support\Facades\Storage;
-
-$filePath = 'example-file.txt'; // Relative path of the file in the container
-
-$url = Storage::disk('azure')->url($filePath);
-
-return response()->json([
-    'file_url' => $url, // Permanent public URL
-]);
-```
-
-#### Temporary URL
-
-To generate a temporary URL (with an expiration time for secure access):
-
-```php
-use Illuminate\Support\Facades\Storage;
-
-$filePath = 'example-file.txt'; // Relative path of the file in the container
-
-$temporaryUrl = Storage::disk('azure')->temporaryUrl(
-    $filePath,
-    now()->addMinutes(30) // Set the expiration time, e.g., 30 minutes
-);
-
-return response()->json([
-    'temporary_url' => $temporaryUrl, // Temporary access URL
-]);
-```
+Usage follows Laravel's filesystem conventions. For uploading, retrieving, and managing files, refer to the official Laravel documentation: 📖 [Laravel Filesystem Documentation](https://laravel.com/docs/11.x/filesystem)
 
 ## Support
 
