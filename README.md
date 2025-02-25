@@ -26,7 +26,7 @@ Then add this to the disks section of config/filesystems.php:
 
 ## Usage
 
-Usage follows Laravel's filesystem conventions. For uploading, retrieving, and managing files, refer to the official Laravel documentation: 📖 [Laravel Filesystem Documentation](https://laravel.com/docs/11.x/filesystem)
+Usage follows Laravel's filesystem conventions. For uploading, retrieving, and managing files, refer to the official Laravel documentation: 📖 [Laravel Filesystem Documentation](https://laravel.com/docs/12.x/filesystem)
 
 ## Support
 
