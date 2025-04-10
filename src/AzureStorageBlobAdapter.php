@@ -2,11 +2,12 @@
 
 namespace AzureOss\LaravelAzureStorageBlob;
 
-use AzureOss\FlysystemAzureBlobStorage\AzureBlobStorageAdapter;
-use AzureOss\Storage\Blob\BlobServiceClient;
-use Illuminate\Filesystem\FilesystemAdapter;
 use League\Flysystem\Config;
 use League\Flysystem\Filesystem;
+use AzureOss\Storage\Blob\BlobServiceClient;
+use Illuminate\Filesystem\FilesystemAdapter;
+use AzureOss\Storage\Blob\BlobContainerClient;
+use AzureOss\FlysystemAzureBlobStorage\AzureBlobStorageAdapter;
 
 /**
  * @internal
@@ -15,14 +16,16 @@ use League\Flysystem\Filesystem;
  */
 final class AzureStorageBlobAdapter extends FilesystemAdapter
 {
+    private BlobContainerClient $containerClient;
+
     /**
      * @param  array{connection_string: string, container: string, prefix?: string, root?: string}  $config
      */
     public function __construct(array $config)
     {
         $serviceClient = BlobServiceClient::fromConnectionString($config['connection_string']);
-        $containerClient = $serviceClient->getContainerClient($config['container']);
-        $adapter = new AzureBlobStorageAdapter($containerClient, $config['prefix'] ?? $config['root'] ?? '');
+        $this->containerClient = $serviceClient->getContainerClient($config['container']);
+        $adapter = new AzureBlobStorageAdapter($this->containerClient, $config['prefix'] ?? $config['root'] ?? '');
 
         parent::__construct(
             new Filesystem($adapter, $config),
@@ -44,5 +47,24 @@ final class AzureStorageBlobAdapter extends FilesystemAdapter
             $expiration,
             new Config(['permissions' => 'r'])
         );
+    }
+
+    /**
+     * @param string $path The path of the blob.
+     * @param array<string> $tags The tags to set.
+     * @return void
+     */
+    public function setTags(string $path, array $tags)
+    {
+        $this->containerClient->getBlobClient($path)->setTags($tags);
+    }
+
+    /**
+     * @param string $path The path of the blob.
+     * @return array<string> The tags for the blob.
+     */
+    public function getTags(string $path): array
+    {
+        return $this->containerClient->getBlobClient($path)->getTags();
     }
 }
