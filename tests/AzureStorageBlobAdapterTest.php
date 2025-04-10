@@ -88,6 +88,16 @@ class AzureStorageBlobAdapterTest extends TestCase
         self::assertFalse($driver->exists('file2.txt'));
         self::assertTrue($driver->exists('file3.txt'));
 
+        $driver->setTags('file3.txt', [
+            'tag1key' => 'tag1value',
+            'tag2key' => 'tag2value',
+        ]);
+
+        self::assertEquals([
+            'tag1key' => 'tag1value',
+            'tag2key' => 'tag2value',
+        ], $driver->getTags('file3.txt'));
+
         self::assertCount(2, $driver->allFiles());
 
         $driver->deleteDirectory('');
