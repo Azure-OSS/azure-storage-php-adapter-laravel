@@ -43,6 +43,7 @@ final class AzureStorageBlobAdapter extends FilesystemAdapter
      * @param  \DateTimeInterface  $expiration
      * @return string
      */
+    /** @phpstan-ignore-next-line */
     public function temporaryUrl($path, $expiration, array $options = [])
     {
         return $this->adapter->temporaryUrl(
@@ -59,6 +60,7 @@ final class AzureStorageBlobAdapter extends FilesystemAdapter
      * @param  \DateTimeInterface  $expiration
      * @return array{url: string, headers: array<string, string>}
      */
+    /** @phpstan-ignore-next-line */
     public function temporaryUploadUrl($path, $expiration, array $options = [])
     {
         $url = $this->adapter->temporaryUrl(
