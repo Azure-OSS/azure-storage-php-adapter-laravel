@@ -36,13 +36,48 @@ final class AzureStorageBlobAdapter extends FilesystemAdapter
         return $this->adapter->publicUrl($path, new Config);
     }
 
-    /** @phpstan-ignore-next-line  */
+    /**
+     * Get a temporary URL for the file at the given path.
+     *
+     * @param  string  $path
+     * @param  \DateTimeInterface  $expiration
+     * @param  array  $options
+     * @return string
+     */
     public function temporaryUrl($path, $expiration, array $options = [])
     {
         return $this->adapter->temporaryUrl(
             $path,
             $expiration,
-            new Config(['permissions' => 'r'])
+            new Config(array_merge(['permissions' => 'r'], $options))
         );
+    }
+
+    /**
+     * Get a temporary upload URL for the file at the given path.
+     *
+     * @param  string  $path
+     * @param  \DateTimeInterface  $expiration
+     * @param  array  $options
+     * @return array{url: string, headers: array<string, string>}
+     */
+    public function temporaryUploadUrl($path, $expiration, array $options = [])
+    {
+        $url = $this->adapter->temporaryUrl(
+            $path,
+            $expiration,
+            new Config(array_merge(['permissions' => 'cw'], $options))
+        );
+        $contentType = isset($options['content-type']) && is_string($options['content-type'])
+            ? $options['content-type']
+            : 'application/octet-stream';
+
+        return [
+            'url' => $url,
+            'headers' => [
+                'x-ms-blob-type' => 'BlockBlob',
+                'Content-Type' => $contentType,
+            ],
+        ];
     }
 }

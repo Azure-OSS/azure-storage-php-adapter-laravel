@@ -88,7 +88,27 @@ class AzureStorageBlobAdapterTest extends TestCase
         self::assertFalse($driver->exists('file2.txt'));
         self::assertTrue($driver->exists('file3.txt'));
 
-        self::assertCount(2, $driver->allFiles());
+        // Test temporary upload URL functionality
+        // Generate a temporary upload URL
+        $uploadData = $driver->temporaryUploadUrl('temp-upload-test.txt', now()->addMinutes(5), [
+            'content-type' => 'text/plain',
+        ]);
+
+        // Upload content directly to the URL
+        $content = 'This content was uploaded directly to a temporary URL';
+        $response = Http::withHeaders($uploadData['headers'])
+            ->withBody($content, 'text/plain')
+            ->put($uploadData['url']);
+
+        // Verify the upload was successful
+        self::assertTrue($response->successful());
+
+        // Verify the file exists and has the correct content
+        self::assertTrue($driver->exists('temp-upload-test.txt'));
+        self::assertEquals($content, $driver->get('temp-upload-test.txt'));
+
+        // Count files and clean up
+        self::assertCount(3, $driver->allFiles()); // file.txt, file3.txt, and temp-upload-test.txt
 
         $driver->deleteDirectory('');
 
