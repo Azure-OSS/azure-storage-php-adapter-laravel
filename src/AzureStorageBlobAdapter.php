@@ -37,6 +37,16 @@ final class AzureStorageBlobAdapter extends FilesystemAdapter
     }
 
     /**
+     * Determine if temporary URLs can be generated.
+     *
+     * @return bool
+     */
+    public function providesTemporaryUrls()
+    {
+        return true;
+    }
+
+    /**
      * Get a temporary URL for the file at the given path.
      *
      * @param  string  $path
