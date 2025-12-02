@@ -4,6 +4,7 @@ namespace AzureOss\LaravelAzureStorageBlob;
 
 use AzureOss\FlysystemAzureBlobStorage\AzureBlobStorageAdapter;
 use AzureOss\Storage\Blob\BlobServiceClient;
+use AzureOss\Storage\Common\Auth\StorageSharedKeyCredential;
 use Illuminate\Filesystem\FilesystemAdapter;
 use League\Flysystem\Config;
 use League\Flysystem\Filesystem;
@@ -43,7 +44,7 @@ final class AzureStorageBlobAdapter extends FilesystemAdapter
      */
     public function providesTemporaryUrls()
     {
-        return true;
+        return $this->adapter->containerClient->sharedKeyCredentials instanceof StorageSharedKeyCredential;
     }
 
     /**
