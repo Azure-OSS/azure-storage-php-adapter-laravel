@@ -1,5 +1,5 @@
 {
-  "name": "azure-oss/storage-blob-laravel",
+  "name": "biigle/laravel-azure-storage",
   "description": "Azure Storage Blob filesystem driver for Laravel",
   "type": "library",
   "license": "MIT",
@@ -17,6 +17,10 @@
     {
       "name": "Brecht Vermeersch",
       "email": "brechtvermeersch@outlook.be"
+    },
+    {
+      "name": "Martin Zurowietz",
+      "email": "m.zurowietz@uni-bielefeld.de"
     }
   ],
   "require": {
