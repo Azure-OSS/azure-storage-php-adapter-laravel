@@ -8,6 +8,7 @@ use AzureOss\Storage\Common\Auth\StorageSharedKeyCredential;
 use Illuminate\Filesystem\FilesystemAdapter;
 use League\Flysystem\Config;
 use League\Flysystem\Filesystem;
+use League\Flysystem\UnableToGenerateTemporaryUrl;
 
 /**
  * @internal
@@ -17,13 +18,21 @@ use League\Flysystem\Filesystem;
 final class AzureStorageBlobAdapter extends FilesystemAdapter
 {
     /**
+     * Set to true to use the direct public URL instead of generating a temporary URL.
+     * If true, also acts as a fallback for new temporary URLs if no account credentials
+     * were provided.
+     */
+    public bool $useDirectPublicUrl;
+
+    /**
      * @param  array{connection_string: string, container: string, prefix?: string, root?: string}  $config
      */
     public function __construct(array $config)
     {
+        $useDirectPublicUrl = $config['use_direct_public_url'] ?? false;
         $serviceClient = BlobServiceClient::fromConnectionString($config['connection_string']);
         $containerClient = $serviceClient->getContainerClient($config['container']);
-        $adapter = new AzureBlobStorageAdapter($containerClient, $config['prefix'] ?? $config['root'] ?? '');
+        $adapter = new AzureBlobStorageAdapter($containerClient, $config['prefix'] ?? $config['root'] ?? '', useDirectPublicUrl: $useDirectPublicUrl);
 
         parent::__construct(
             new Filesystem($adapter, $config),
@@ -44,7 +53,7 @@ final class AzureStorageBlobAdapter extends FilesystemAdapter
      */
     public function providesTemporaryUrls()
     {
-        return $this->adapter->containerClient->sharedKeyCredentials instanceof StorageSharedKeyCredential;
+        return $this->adapter->containerClient->sharedKeyCredentials instanceof StorageSharedKeyCredential || $this->useDirectPublicUrl;
     }
 
     /**
@@ -57,11 +66,19 @@ final class AzureStorageBlobAdapter extends FilesystemAdapter
     /** @phpstan-ignore-next-line */
     public function temporaryUrl($path, $expiration, array $options = [])
     {
-        return $this->adapter->temporaryUrl(
-            $path,
-            $expiration,
-            new Config(array_merge(['permissions' => 'r'], $options))
-        );
+        try {
+            return $this->adapter->temporaryUrl(
+                $path,
+                $expiration,
+                new Config(array_merge(['permissions' => 'r'], $options))
+            );
+        } catch (UnableToGenerateTemporaryUrl $e) {
+            if ($this->useDirectPublicUrl) {
+                return $this->url($path);
+            } else {
+                throw $e;
+            }
+        }
     }
 
     /**
