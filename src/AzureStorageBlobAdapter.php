@@ -16,12 +16,18 @@ use League\Flysystem\Filesystem;
 final class AzureStorageBlobAdapter extends FilesystemAdapter
 {
     /**
+     * Whether the configuration of this adapter allows temporary URLs.
+     */
+    public bool $canProvideTemporaryUrls;
+
+    /**
      * @param  array{connection_string: string, container: string, prefix?: string, root?: string}  $config
      */
     public function __construct(array $config)
     {
         $serviceClient = BlobServiceClient::fromConnectionString($config['connection_string']);
         $containerClient = $serviceClient->getContainerClient($config['container']);
+        $this->canProvideTemporaryUrls = $containerClient->canGenerateSasUri();
         $adapter = new AzureBlobStorageAdapter($containerClient, $config['prefix'] ?? $config['root'] ?? '');
 
         parent::__construct(
@@ -43,7 +49,7 @@ final class AzureStorageBlobAdapter extends FilesystemAdapter
      */
     public function providesTemporaryUrls()
     {
-        return true;
+        return $this->canProvideTemporaryUrls;
     }
 
     /**
