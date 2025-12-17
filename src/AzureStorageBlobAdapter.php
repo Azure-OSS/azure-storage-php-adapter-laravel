@@ -15,7 +15,6 @@ use League\Flysystem\Filesystem;
  */
 final class AzureStorageBlobAdapter extends FilesystemAdapter
 {
-
     /**
      * Whether the configuration of this adapter allows temporary URLs.
      */
