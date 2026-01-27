@@ -41,6 +41,14 @@ final class AzureStorageBlobAdapter extends FilesystemAdapter
 
     public function url($path)
     {
+        // Handle container URL request (passes '/' or '')
+        if ($path === '/' || $path === '') {
+            return $this->baseUrl ?? '';
+        }
+
+        // Normalize path - remove leading slashes that Azure doesn't support
+        $path = ltrim($path, '/');
+        
         return $this->adapter->publicUrl($path, new Config);
     }
 
