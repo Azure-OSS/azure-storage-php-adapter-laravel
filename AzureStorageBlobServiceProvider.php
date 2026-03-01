@@ -21,7 +21,7 @@ final class AzureStorageBlobServiceProvider extends ServiceProvider
                 throw new \InvalidArgumentException('The [connection_string] must be a string in the disk configuration.');
             }
 
-            if (! isset($config['container']) && ! is_string($config['container'])) {
+            if (! isset($config['container']) || ! is_string($config['container'])) {
                 throw new \InvalidArgumentException('The [container] must be a string in the disk configuration.');
             }
 
