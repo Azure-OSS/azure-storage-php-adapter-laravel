@@ -18,14 +18,36 @@ composer require azure-oss/storage-blob-laravel
 ```
 
 
-Then add this to the disks section of config/filesystems.php:
+Then add this to the disks section of config/filesystems.php.
+
+**Using a storage account connection string (Shared Key):**
 ```php
-'azure' => [ 
+'azure' => [
     'driver' => 'azure-storage-blob',
     'connection_string' => env('AZURE_STORAGE_CONNECTION_STRING'),
     'container' => env('AZURE_STORAGE_CONTAINER'),
 ],
 ```
+
+**Using Microsoft Entra ID (formerly Azure Active Directory) credentials:**
+
+Token-based authentication uses a Microsoft Entra ID (Azure AD) application (service principal) with a client secret. This avoids storing account keys and enables modern authentication scenarios such as workload identity and managed identity.
+
+```php
+'azure' => [
+    'driver' => 'azure-storage-blob',
+    'endpoint' => env('AZURE_STORAGE_ENDPOINT'), // e.g. https://mystorageaccount.blob.core.windows.net
+    // Or use account_name (endpoint will be built as https://{account_name}.blob.core.windows.net):
+    // 'account_name' => env('AZURE_STORAGE_ACCOUNT_NAME'),
+    // 'endpoint_suffix' => env('AZURE_STORAGE_ENDPOINT_SUFFIX', 'core.windows.net'), // for Azure China, etc.
+    'tenant_id' => env('AZURE_STORAGE_TENANT_ID'),
+    'client_id' => env('AZURE_STORAGE_CLIENT_ID'),
+    'client_secret' => env('AZURE_STORAGE_CLIENT_SECRET'),
+    'container' => env('AZURE_STORAGE_CONTAINER'),
+],
+```
+
+> **Note:** When using Microsoft Entra ID credentials, this driver cannot generate shared access signatures (SAS). The `providesTemporaryUrls()` method will return `false`.
 
 ## Usage
 

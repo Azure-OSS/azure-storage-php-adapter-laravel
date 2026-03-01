@@ -6,9 +6,12 @@ namespace AzureOss\Storage\BlobLaravel;
 
 use AzureOss\Storage\Blob\BlobServiceClient;
 use AzureOss\Storage\BlobFlysystem\AzureBlobStorageAdapter;
+use AzureOss\Storage\Common\Auth\ClientSecretCredential;
+use GuzzleHttp\Psr7\Uri;
 use Illuminate\Filesystem\FilesystemAdapter;
 use League\Flysystem\Config;
 use League\Flysystem\Filesystem;
+use Psr\Http\Message\UriInterface;
 
 /**
  * @internal
@@ -23,11 +26,11 @@ final class AzureStorageBlobAdapter extends FilesystemAdapter
     public bool $canProvideTemporaryUrls;
 
     /**
-     * @param  array{connection_string: string, container: string, prefix?: string, root?: string}  $config
+     * @param  array{connection_string?: string, endpoint?: string, account_name?: string, endpoint_suffix?: string, tenant_id?: string, client_id?: string, client_secret?: string, container: string, prefix?: string, root?: string}  $config
      */
     public function __construct(array $config)
     {
-        $serviceClient = BlobServiceClient::fromConnectionString($config['connection_string']);
+        $serviceClient = self::createBlobServiceClient($config);
         $containerClient = $serviceClient->getContainerClient($config['container']);
         $this->canProvideTemporaryUrls = $containerClient->canGenerateSasUri();
         $adapter = new AzureBlobStorageAdapter($containerClient, $config['prefix'] ?? $config['root'] ?? '');
@@ -37,6 +40,51 @@ final class AzureStorageBlobAdapter extends FilesystemAdapter
             $adapter,
             $config,
         );
+    }
+
+    /**
+     * @param  array{connection_string?: string, endpoint?: string, account_name?: string, endpoint_suffix?: string, tenant_id?: string, client_id?: string, client_secret?: string, container: string}  $config
+     */
+    private static function createBlobServiceClient(array $config): BlobServiceClient
+    {
+        $connectionString = $config['connection_string'] ?? null;
+        if (is_string($connectionString) && $connectionString !== '') {
+            return BlobServiceClient::fromConnectionString($connectionString);
+        }
+
+        $tenantId = $config['tenant_id'] ?? null;
+        $clientId = $config['client_id'] ?? null;
+        $clientSecret = $config['client_secret'] ?? null;
+
+        if (! is_string($tenantId) || ! is_string($clientId) || ! is_string($clientSecret)) {
+            throw new \InvalidArgumentException('Token-based credentials require [tenant_id], [client_id], and [client_secret].');
+        }
+
+        $uri = self::buildBlobEndpointUri($config);
+        $credential = new ClientSecretCredential($tenantId, $clientId, $clientSecret);
+
+        return new BlobServiceClient($uri, $credential);
+    }
+
+    /**
+     * @param  array{endpoint?: string, account_name?: string, endpoint_suffix?: string}  $config
+     */
+    private static function buildBlobEndpointUri(array $config): UriInterface
+    {
+        $endpoint = $config['endpoint'] ?? null;
+        if (is_string($endpoint) && $endpoint !== '') {
+            return new Uri(rtrim($endpoint, '/').'/');
+        }
+
+        $accountName = $config['account_name'] ?? null;
+        if (! is_string($accountName) || $accountName === '') {
+            throw new \InvalidArgumentException('Either [endpoint] or [account_name] must be provided for token-based credentials.');
+        }
+
+        $endpointSuffix = $config['endpoint_suffix'] ?? 'core.windows.net';
+        $endpoint = sprintf('https://%s.blob.%s', $accountName, $endpointSuffix);
+
+        return new Uri($endpoint.'/');
     }
 
     public function url($path)
