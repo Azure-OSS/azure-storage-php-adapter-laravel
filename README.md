@@ -68,6 +68,30 @@ When `is_public_container` is enabled, `Storage::disk('azure')->url($path)` retu
 
 Usage follows Laravel's filesystem conventions. For uploading, retrieving, and managing files, refer to the official Laravel documentation: 📖 [Laravel Filesystem Documentation](https://laravel.com/docs/12.x/filesystem)
 
+## Upload Options (HTTP Headers)
+
+You can set blob HTTP headers (including `Cache-Control`) by passing Flysystem options as the 3rd argument to `put()`:
+
+```php
+use Illuminate\Support\Facades\Storage;
+
+Storage::disk('azure')->put('assets/app.css', $css, [
+    'httpHeaders' => [
+        'cacheControl' => 'public, max-age=31536000',
+        'contentType' => 'text/css',
+    ],
+]);
+```
+
+Supported `httpHeaders` keys:
+
+* `cacheControl`
+* `contentDisposition`
+* `contentEncoding`
+* `contentHash`
+* `contentLanguage`
+* `contentType`
+
 ## Support
 
 Do you need help, do you want to talk to us, or is there anything else?
