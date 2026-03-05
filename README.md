@@ -49,6 +49,21 @@ Token-based authentication uses a Microsoft Entra ID (Azure AD) application (ser
 
 > **Note:** When using Microsoft Entra ID credentials, this driver cannot generate shared access signatures (SAS). The `providesTemporaryUrls()` method will return `false`.
 
+## Public Containers
+
+If your container is configured for public access, you can enable direct public URLs:
+
+```php
+'azure' => [
+    'driver' => 'azure-storage-blob',
+    // credentials...
+    'container' => env('AZURE_STORAGE_CONTAINER'),
+    'is_public_container' => true,
+],
+```
+
+When `is_public_container` is enabled, `Storage::disk('azure')->url($path)` returns the direct blob URL (no SAS).
+
 ## Usage
 
 Usage follows Laravel's filesystem conventions. For uploading, retrieving, and managing files, refer to the official Laravel documentation: 📖 [Laravel Filesystem Documentation](https://laravel.com/docs/12.x/filesystem)

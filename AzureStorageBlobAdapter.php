@@ -26,14 +26,19 @@ final class AzureStorageBlobAdapter extends FilesystemAdapter
     public bool $canProvideTemporaryUrls;
 
     /**
-     * @param  array{connection_string?: string, endpoint?: string, account_name?: string, endpoint_suffix?: string, tenant_id?: string, client_id?: string, client_secret?: string, container: string, prefix?: string, root?: string}  $config
+     * @param  array{connection_string?: string, endpoint?: string, account_name?: string, endpoint_suffix?: string, tenant_id?: string, client_id?: string, client_secret?: string, container: string, prefix?: string, root?: string, is_public_container?: bool}  $config
      */
     public function __construct(array $config)
     {
         $serviceClient = self::createBlobServiceClient($config);
         $containerClient = $serviceClient->getContainerClient($config['container']);
         $this->canProvideTemporaryUrls = $containerClient->canGenerateSasUri();
-        $adapter = new AzureBlobStorageAdapter($containerClient, $config['prefix'] ?? $config['root'] ?? '');
+        $isPublicContainer = $config['is_public_container'] ?? false;
+        $adapter = new AzureBlobStorageAdapter(
+            $containerClient,
+            $config['prefix'] ?? $config['root'] ?? '',
+            isPublicContainer: $isPublicContainer,
+        );
 
         parent::__construct(
             new Filesystem($adapter, $config),

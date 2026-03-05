@@ -28,6 +28,7 @@ final class AzureStorageBlobServiceProvider extends ServiceProvider
             self::assertStringConfig($config, 'endpoint_suffix');
             self::assertStringConfig($config, 'account_name');
             self::assertStringConfig($config, 'connection_string');
+            self::assertBoolConfig($config, 'is_public_container');
 
             $hasConnectionString = isset($config['connection_string']);
             $hasEndpoint = isset($config['endpoint']);
@@ -67,6 +68,24 @@ final class AzureStorageBlobServiceProvider extends ServiceProvider
 
         if (! is_string($config[$key])) {
             throw new \InvalidArgumentException("The [{$key}] must be a string in the disk configuration.");
+        }
+    }
+
+    /**
+     * @param  array<string, mixed>  $config
+     */
+    private static function assertBoolConfig(array $config, string $key, bool $required = false): void
+    {
+        if (! array_key_exists($key, $config) || $config[$key] === null) {
+            if ($required) {
+                throw new \InvalidArgumentException("The [{$key}] must be a boolean in the disk configuration.");
+            }
+
+            return;
+        }
+
+        if (! is_bool($config[$key])) {
+            throw new \InvalidArgumentException("The [{$key}] must be a boolean in the disk configuration.");
         }
     }
 }
