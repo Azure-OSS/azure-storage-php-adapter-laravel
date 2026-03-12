@@ -61,4 +61,4 @@ $disk->delete('docs/hello-moved.txt');
 
 ## License
 
-This project is released under the MIT License. See [LICENSE](.https://github.com/Azure-OSS/azure-storage-php-monorepo/blob/02759360186be8d2d04bd1e9b2aba3839b6d39dc/LICENSE) for details.
+This project is released under the MIT License. See [LICENSE](https://github.com/Azure-OSS/azure-storage-php-monorepo/blob/02759360186be8d2d04bd1e9b2aba3839b6d39dc/LICENSE) for details.
