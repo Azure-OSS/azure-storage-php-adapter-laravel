@@ -11,6 +11,14 @@ We picked up where they left off.
 
 <img src="https://azure-oss.github.io/img/logo.svg" width="150" alt="Screenshot">
 
+Our other packages:
+
+- **[azure-oss/storage](https://packagist.org/packages/azure-oss/storage)** – Azure Blob Storage SDK  
+  ![Downloads](https://img.shields.io/packagist/dt/azure-oss/storage)
+
+- **[azure-oss/storage-blob-flysystem](https://packagist.org/packages/azure-oss/storage-blob-flysystem)** – Flysystem adapter  
+  ![Downloads](https://img.shields.io/packagist/dt/azure-oss/storage-blob-flysystem)
+
 ## Install
 
 ```shell
