@@ -6,7 +6,7 @@ namespace AzureOss\Storage\BlobLaravel;
 
 use AzureOss\Storage\Blob\BlobServiceClient;
 use AzureOss\Storage\BlobFlysystem\AzureBlobStorageAdapter;
-use AzureOss\Storage\Common\Auth\ClientSecretCredential;
+use AzureOss\Identity\ClientSecretCredential;
 use GuzzleHttp\Psr7\Uri;
 use Illuminate\Filesystem\FilesystemAdapter;
 use League\Flysystem\Config;
