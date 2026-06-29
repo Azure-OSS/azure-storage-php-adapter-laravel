@@ -23,11 +23,11 @@ composer require azure-oss/storage-blob-laravel
 ],
 ```
 
-Besides shared key via connection string, this driver supports additional authentication methods such as Entra ID / token-based credentials, managed identity, workload identity, and shared key via account key. See the [installation docs](https://azure-oss.github.io/category/storage-blob-laravel/installation) for configuration examples.
+Besides shared key via connection string, this driver supports additional authentication methods such as Entra ID / token-based credentials, managed identity, workload identity, and shared key via account key. See the [installation docs](https://php-oss-for-azure.github.io/category/storage-blob-laravel/installation) for configuration examples.
 
 ## Documentation
 
-You can read the documentation [here](https://azure-oss.github.io/category/storage-blob-laravel).
+You can read the documentation [here](https://php-oss-for-azure.github.io/category/storage-blob-laravel).
 
 ## Related packages
 
@@ -43,7 +43,7 @@ You can read the documentation [here](https://azure-oss.github.io/category/stora
 
 ## Maintenance
 
-This package is part of the community-maintained `azure-oss` Azure SDKs for PHP. It is an independent project and is not affiliated with or endorsed by Microsoft.
+This package is part of the community-maintained PHP OSS for Azure project. It is an independent project and is not affiliated with or endorsed by Microsoft.
 
 ## License
 
