@@ -5,6 +5,9 @@
 
 A Laravel filesystem driver for Azure Blob Storage built on top of the Flysystem adapter.
 
+> [!IMPORTANT]
+> This package is community-maintained and is not affiliated with, endorsed by, or supported by Microsoft.
+
 ## Install
 
 ```shell
