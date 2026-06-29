@@ -50,4 +50,4 @@ This package is part of the community-maintained PHP OSS for Azure project. It i
 
 ## License
 
-This project is released under the MIT License. See [LICENSE](https://github.com/Azure-OSS/azure-php/blob/main/LICENSE) for details.
+This project is released under the MIT License. See [LICENSE](./LICENSE) for details.
