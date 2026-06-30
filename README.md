@@ -32,6 +32,11 @@ Besides shared key via connection string, this driver supports additional authen
 
 You can read the documentation [here](https://php-oss-for-azure.github.io/category/storage-blob-laravel).
 
+## Migration Guide
+
+Migrating from `matthewbdaly/laravel-azure-storage`?
+[Migrate from matthewbdaly/laravel-azure-storage](https://php-oss-for-azure.github.io/storage-blob-laravel/migrate-from-matthewbdaly-laravel-azure-storage).
+
 ## Related packages
 
 - **[azure-oss/storage](https://packagist.org/packages/azure-oss/storage)** — Meta package for the Storage SDKs
