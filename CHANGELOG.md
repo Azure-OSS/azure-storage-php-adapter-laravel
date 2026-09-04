@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+No user-facing changes since `2.2.1`.
+
+## 2.2.1
+
+### Fixed
+
+- Fixed the README logo so it renders on Packagist.
+
 ## 2.2.0
 
 ### Changed
